@@ -22,15 +22,70 @@ blockchain dApps.\
 // in solidity everythin is explicity delclared\
 contract CryptoToken \{\
     \
-    // it can mint tokens\
+    //what if we want to store addresses and then give each address a specific\
+    //number or index?? - the solution is mapping\
+    \
+    //mapping: acts like a dictionary to store data\
+    //mapping(key => value) public mapName\
+    \
+    mapping(address => uint) public balances;\
+    \
+    //we only want the msg.sender (th current caller)\
+    //to be able to mint tokens\
+    \
+    address public minter;\
+    \
+    //Events allow clients to react to specific contract\
+    //changes that you declare (one way loggin of transactions)\
+    //types of events : Sent Transfer allow\
+    \
+    //preconditioned arguments (inputs) we should pass\
+    event Sent(address from, address to, uint amount);\
+    \
+    //Build a minting function to mint tokens\
+    \
+    function mint(address receiver, uint amount) public \{\
+        // i want to make sure that only person who can mint\
+        // tokens is the owner of this contract\
+        \
+        //requirement method in solidity\
+        \
+        //requires check the truthiness equivalency within its paranthesis\
+        require(msg.sender == minter);\
+        \
+        //sets the amount to a specific address\
+        balances[receiver] += amount;\
+    \}\
+    \
+    function send(address receiver, uint amount) public \{\
+        balances[msg.sender] -= amount;\
+        balances[receiver] += amount;\
+        emit Sent(msg.sender, receiver, amount);\
+    \}\
+    \
     \
     // all the code to write smart contract go in here\
     // objects in programming are an abstract datatype\
     // with the ability for inheritance\
-    // create a contract called LearningSolidity    \
-\
+    \
+    //uint public tokens = 4000000;\
+    \
+    //uint private totalSupply = 7;\
+    //address public sender;    \
+    \
+    // mission : we want our CryptoToken to mint tokens\
+    // we want a datatype for storing integers (tokens)\
+    \
+    // it can mint tokens\
+    \
+    constructor() \{\
+        minter = msg.sender;\
+    \}\
 \}\
 \
-contract LearningSolidity \{\
+// // create a contract called LearningSolidity    \
+// contract LearningSolidity \{\
     \
-\}}
+// \}\
+\
+}
